@@ -13,9 +13,7 @@ class UpdateAPI():
         today = datetime.now().strftime("%Y-%m-%d")
         self.api = f"https://www.broadcom.com/api/getjsonbyurl?vanityurl=support/security-center/definitions/download/detail&locale=avg_en&updateddate={today}-12:18:16&gid={product_type}"
         self.suitable_day = "{}/{}/{}".format((datetime.now() - timedelta(days=1)).month, (datetime.now() - timedelta(days=1)).day, (datetime.now() - timedelta(days=1)).year)
-        self.download_folder = os.getcwd() + "/SEP/"
-        if not os.path.exists(self.download_folder):
-            os.mkdir(self.download_folder)
+        self.download_folder = " " # Folder path
 
     def checkHash(self, file_name):
         md5_hash = hashlib.md5()
