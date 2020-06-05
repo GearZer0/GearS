@@ -4,16 +4,18 @@ import requests
 import hashlib
 from datetime import datetime, timedelta
 import os
+import shutil
 #import win32api
 #import win32net
 
 
 class UpdateAPI():
     def __init__(self, product_type):
-        today = datetime.now().strftime("%Y-%m-%d")
-        self.api = f"https://www.broadcom.com/api/getjsonbyurl?vanityurl=support/security-center/definitions/download/detail&locale=avg_en&updateddate={today}-12:18:16&gid={product_type}"
+        date_updated = requests.head(f'https://www.broadcom.com/support/security-center/definitions/download/detail?gid={product_type}').headers.get('Last-Modified').split(' ')[-2]
+        today = datetime.now().strftime("%Y-%m-%d") + "-" + date_updated
+        self.api = f"https://www.broadcom.com/api/getjsonbyurl?vanityurl=support/security-center/definitions/download/detail&locale=avg_en&updateddate={today}&gid={product_type}"
         self.suitable_day = "{}/{}/{}".format((datetime.now() - timedelta(days=1)).month, (datetime.now() - timedelta(days=1)).day, (datetime.now() - timedelta(days=1)).year)
-        self.download_folder = " " # Folder path
+        self.download_folder = "" # Folder path
 
     def checkHash(self, file_name):
         md5_hash = hashlib.md5()
@@ -65,10 +67,16 @@ if __name__ == "__main__":
     updateDownloader.check()
     updateDownloader = UpdateAPI("sonar")
     updateDownloader.check()
-    ip = '192.168.1.18' #remote ip
+    files = os.listdir(updateDownloader.download_folder)
+    for filename in files:
+        src = updateDownloader.download_folder + "/" + filename
+        dest = " " # place the network folder location
+        shutil.move(src, dest + "/" + filename)
+    print("Files moved successfully")
+    '''ip = '192.168.1.18' #remote ip
     username = 'ram' # change to input("Username: ")
     password = 'ram@123' # change to input("Password: ")
-    '''use_dict={}
+    use_dict={}
     use_dict['remote']=unicode('\\\\{}\C$'.format(ip))
     use_dict['password']=unicode(password)
     use_dict['username']=unicode(username)
