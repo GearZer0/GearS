@@ -4,8 +4,7 @@ import requests
 import hashlib
 from datetime import datetime, timedelta
 import os
-#import win32api
-#import win32net
+import shutil
 
 
 class UpdateAPI():
@@ -13,7 +12,7 @@ class UpdateAPI():
         today = datetime.now().strftime("%Y-%m-%d")
         self.api = f"https://www.broadcom.com/api/getjsonbyurl?vanityurl=support/security-center/definitions/download/detail&locale=avg_en&updateddate={today}-12:18:16&gid={product_type}"
         self.suitable_day = "{}/{}/{}".format((datetime.now() - timedelta(days=1)).month, (datetime.now() - timedelta(days=1)).day, (datetime.now() - timedelta(days=1)).year)
-        self.download_folder = " " # Folder path
+        self.download_folder = " " # File path
 
     def checkHash(self, file_name):
         md5_hash = hashlib.md5()
@@ -65,11 +64,9 @@ if __name__ == "__main__":
     updateDownloader.check()
     updateDownloader = UpdateAPI("sonar")
     updateDownloader.check()
-    ip = '192.168.1.18' #remote ip
-    username = 'ram' # change to input("Username: ")
-    password = 'ram@123' # change to input("Password: ")
-    '''use_dict={}
-    use_dict['remote']=unicode('\\\\{}\C$'.format(ip))
-    use_dict['password']=unicode(password)
-    use_dict['username']=unicode(username)
-    win32net.NetUseAdd(None, 2, use_dict)'''
+    files = os.listdir(updateDownloader.download_folder)
+    for filename in files:
+        src = updateDownloader.download_folder + "/" + filename
+        dest = "Network location" # place the network folder location here
+        shutil.move(src, dest + "/" + filename)
+    print("Files moved successfully")
