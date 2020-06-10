@@ -1,6 +1,6 @@
 # AutomateFileDownloader tool
 
-AutomateFileDownloader tool automatically compare the hash of a file and download if it the hash matches
+AutomateFileDownloader tool automatically compare the hash of the file and download the file if it the hash matches.
 
 ## Break down of the automation steps
 ````
@@ -14,7 +14,7 @@ AutomateFileDownloader tool automatically compare the hash of a file and downloa
 ## Configuration
 Fill in the following in auto.py :
 ````
-self.download_folder = ""   folder download path
+self.download_folder = ""   download file location
 dest = ""                   network folder location
 ````
 
