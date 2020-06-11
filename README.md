@@ -1,6 +1,6 @@
 # AutomateFileDownloader tool
 
-AutomateFileDownloader tool automatically compare the hash of the file and download the file if it the hash matches.
+AutomateFileDownloader tool automatically compare the hash of the file and download the file if the hash matches  the website's.
 
 ## Break down of the automation steps
 ````
