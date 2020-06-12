@@ -5,6 +5,7 @@ import hashlib
 from datetime import datetime, timedelta
 import os
 import shutil
+from subprocess import Popen
 #import win32api
 #import win32net
 
@@ -15,7 +16,7 @@ class UpdateAPI():
         today = datetime.now().strftime("%Y-%m-%d") + "-" + date_updated
         self.api = f"https://www.broadcom.com/api/getjsonbyurl?vanityurl=support/security-center/definitions/download/detail&locale=avg_en&updateddate={today}&gid={product_type}"
         self.suitable_day = "{}/{}/{}".format((datetime.now() - timedelta(days=1)).month, (datetime.now() - timedelta(days=1)).day, (datetime.now() - timedelta(days=1)).year)
-        self.download_folder = "" # Folder path
+        self.download_folder = r"" # Folder path
 
     def checkHash(self, file_name):
         md5_hash = hashlib.md5()
@@ -50,27 +51,32 @@ class UpdateAPI():
                 if released == self.suitable_day:
                     # this is a perfect day to download the update
                     print("Download initiated due to perfect date match!")
-                    with open(self.download_folder + file_name, 'wb+') as downloaded_file:
-                        downloaded_file.write(requests.get(file_download_link, stream=True).content)
+                    '''with open(self.download_folder + file_name, 'wb+') as downloaded_file:
+                        downloaded_file.write(requests.get(file_download_link, stream=True).content)'''
+                    Popen([r'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe',file_download_link])
+                    while True:
+                        if os.path.exists(self.download_folder + "\\" + file_name):
+                            break
                     print(f"{file_name} has been downloaded and hash checking is being processed ...")
                     if self.checkHash(self.download_folder + file_name) == file_md5:
                         print("File hash is healthy!")
+                        files_to_move.append(file_name)
                     else:
                         print("Hash mismatch!")
                 break
 
 
 if __name__ == "__main__":
+    files_to_move = []
     updateDownloader = UpdateAPI("sep14")
     updateDownloader.check()
     updateDownloader = UpdateAPI("ips14")
     updateDownloader.check()
     updateDownloader = UpdateAPI("sonar")
     updateDownloader.check()
-    files = os.listdir(updateDownloader.download_folder)
-    for filename in files:
+    for filename in files_to_move:
         src = updateDownloader.download_folder + "/" + filename
-        dest = " " # place the network folder location
+        dest = r"" # place the network folder location
         shutil.move(src, dest + "/" + filename)
     print("Files moved successfully")
     '''ip = '192.168.1.18' #remote ip
