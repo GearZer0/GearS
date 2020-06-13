@@ -53,7 +53,7 @@ class UpdateAPI():
                     print("Download initiated due to perfect date match!")
                     '''with open(self.download_folder + file_name, 'wb+') as downloaded_file:
                         downloaded_file.write(requests.get(file_download_link, stream=True).content)'''
-                    Popen([r'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe',file_download_link])
+                    Popen([r'',file_download_link])
                     while True:
                         if os.path.exists(self.download_folder + "\\" + file_name):
                             break
