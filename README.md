@@ -14,8 +14,9 @@ AutomateFileDownloader tool automatically compare the hash of the file and downl
 ## Configuration
 Fill in the following in auto.py :
 ````
-self.download_folder = ""   download file location
-dest = ""                   network folder location
+self.download_folder = ""         download file location
+dest = ""                         network folder location
+Popen([r'',file_download_link])   browser exe path
 ````
 
 # Command to run this tool
